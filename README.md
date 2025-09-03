@@ -38,11 +38,3 @@ feat: 機能Aを追加
 | remove   | ファイルなどの削除                                      |
 | test     | テスト関連                                              |
 | chore    | ビルド、補助ツール、ライブラリ関連                      |
-
-## Git,GitHub を使ったことがないという人へ
-
-[sandbox](https://github.com/NIT-Maizuru-E-Project/sandbox)というリポジトリを練習用に開放しています．自由に使ってください．
-
-> [!TIP]
-> 使いたい場合は，管理者(その年の部長)に利用申請をしてください．  
-> リポジトリに対して Contoributer として追加することで書き込み権限が付与されます．
