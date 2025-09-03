@@ -1,0 +1,2 @@
+# Yosegyutto_maizuru
+舞鶴よせぎゅっとチームのリポジトリ
