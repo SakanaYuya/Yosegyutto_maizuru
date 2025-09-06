@@ -3,7 +3,7 @@ import numpy as np
 from utils.shape_detector import detect_shape
 
 # 入力画像の読み込み
-img = cv2.imread("Yosegyutto_maizuru/get_pattern/images/test_parfect_sannkaku_1.png")
+img = cv2.imread("Yosegyutto_maizuru/get_pattern/images/test_sam_sannkaku_4.png")
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
 # エッジ検出
@@ -20,7 +20,7 @@ for cnt in contours:
                 cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255,0,0), 2)
 
 # 保存と表示
-cv2.imwrite("Yosegyutto_maizuru/get_pattern/output/return_test_parfect_sannkaku_1.jpg", img)
+cv2.imwrite("Yosegyutto_maizuru/get_pattern/output/return_test_sam_sannkaku_4.jpg", img)
 cv2.imshow("Detected Shapes", img)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
