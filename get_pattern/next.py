@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 # 入力画像
-img_path = "Yosegyutto_maizuru/get_pattern/images/test_sam_sannkaku_3.png"
+img_path = "get_pattern/images/test_sam_sannkaku_4.png"
 img = cv2.imread(img_path)
 
 # ---- 黒色抽出 (RGBベース) ----
