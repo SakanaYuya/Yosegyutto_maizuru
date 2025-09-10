@@ -1,13 +1,14 @@
-#最新版
+#最新版json系時期に変換する
 import cv2
 import numpy as np
 import json
 import os
 
 # 入力画像
-img_path = "get_pattern/images/test_sam_sannkaku_7.png"
+img_path = "get_pattern/images/test_sam_sannkaku_7.png"#入力画像パスを指定
 img = cv2.imread(img_path)
 
+#=====================処理判定=================--
 # ---- 黒色抽出 ----
 lower_black = np.array([0, 0, 0])
 upper_black = np.array([50, 50, 50])
@@ -49,6 +50,7 @@ for cnt in contours:
             "id": f"Tra{triangle_count}",
             "vertices": tri_vertices
         })
+#=====================処理判定=================--
 
 # JSONファイルを保存
 os.makedirs("fson_Tra", exist_ok=True)

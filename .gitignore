@@ -1,0 +1,5 @@
+# 画像フォルダを無視
+get_pattern/images/
+
+# 出力JSONなどを置くフォルダを無視
+fson_Tra/
