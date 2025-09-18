@@ -8,12 +8,12 @@ output_dir = r"C:/Users/ysaka/programs/yosegi/Yosegyutto_maizuru/fson_Tra"
 os.makedirs(output_dir, exist_ok=True)
 
 # 出力ファイル名（ユーザーが後で変更可能）
-image_name = "some1.png"
-processed_name = "some1.png"
-json_name = "some1.json"
+image_name = "test3.png"
+processed_name = "test3.png"
+json_name = "test3.json"
 
 # 入力画像を読み込み
-img = cv2.imread("C:/Users/ysaka/programs/yosegi/Yosegyutto_maizuru/get_pattern/images/some.png")
+img = cv2.imread("C:/Users/ysaka/programs/yosegi/Yosegyutto_maizuru/get_pattern/images/120_sannkaku.png")
 if img is None:
     raise FileNotFoundError("画像が読み込めませんでした。パスを確認してください。")
 
@@ -127,7 +127,7 @@ for cnt in contours:
                 0.5, (255, 0, 0), 2)
 
 # ==== 出力処理 ====
-cv2.imwrite(os.path.join(output_dir, image_name), cv2.imread("C:/Users/ysaka/programs/yosegi/Yosegyutto_maizuru/get_pattern/images/some.png"))
+cv2.imwrite(os.path.join(output_dir, image_name), cv2.imread("C:/Users/ysaka/programs/yosegi/Yosegyutto_maizuru/get_pattern/images/120_sannkaku.png"))
 cv2.imwrite(os.path.join(output_dir, processed_name), img)
 
 with open(os.path.join(output_dir, json_name), "w") as f:

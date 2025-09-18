@@ -1,38 +1,35 @@
 import cv2
-import json
 import numpy as np
+import json
+import os
 
-# JSONファイルのパス
-json_path = "fson_Tra/triangles.json"
+# ==== 設定 ====
+input_json = r"C:/Users/ysaka/programs/yosegi/Yosegyutto_maizuru/fson_Tra/test3.json"
+output_image = r"C:/Users/ysaka/programs/yosegi/Yosegyutto_maizuru/fson_Tra/sikaku2_decoded.png"
 
-# JSONを読み込む
-with open(json_path, "r", encoding="utf-8") as f:
+canvas_size = 720  # キャンバスを 720px 四方に固定
+line_color = (0, 0, 255)  # 赤
+line_thickness = 5
+
+# ==== JSON 読み込み ====
+with open(input_json, "r") as f:
     data = json.load(f)
 
-# 白背景のキャンバスを作成
-canvas = np.ones((600, 800, 3), dtype=np.uint8) * 255
+# ==== キャンバス作成 ====
+img = np.ones((canvas_size, canvas_size, 3), dtype=np.uint8) * 255  # 白背景
 
-# 三角形を描画
-for tri in data["triangles"]:
-    vertices = np.array(tri["vertices"], dtype=np.int32)
-    vertices = vertices.reshape((-1, 1, 2))  # OpenCV用に整形
+# ==== 図形描画 ====
+for shape_type in ["triangles", "isosceles_triangles", "squares", "rhombuses"]:
+    for shape in data[shape_type]:
+        vertices = shape["vertices"]
+        # [x1,y1,x2,y2,…] を [[x1,y1],[x2,y2],…] に変換
+        pts = np.array([vertices[i:i+2] for i in range(0, len(vertices), 2)], dtype=np.int32)
+        cv2.polylines(img, [pts], isClosed=True, color=line_color, thickness=line_thickness)
+        # ID描画
+        cv2.putText(img, shape["id"], tuple(pts[0]), cv2.FONT_HERSHEY_SIMPLEX,
+                    0.5, (0, 255, 0), 2)
 
-    # 輪郭（多角形として描画）
-    cv2.polylines(canvas, [vertices], isClosed=True, color=(0, 255, 0), thickness=2)
-
-    # 頂点を赤でマーク
-    for (x, y) in tri["vertices"]:
-        cv2.rectangle(canvas, (x-1, y-1), (x+1, y+1), (0, 0, 255), -1)
-
-    # IDラベルを表示（最初の頂点の近く）
-    cv2.putText(canvas, tri["id"], tuple(tri["vertices"][0]),
-                cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 0, 0), 2)
-
-# 表示
-cv2.imshow("Decoded Triangles", canvas)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
-
-# 保存（必要なら）
-cv2.imwrite("fson_Tra/decoded_triangles.png", canvas)
-print("三角形を描画しました -> fson_Tra/decoded_triangles.png")
+# ==== 保存 ====
+os.makedirs(os.path.dirname(output_image), exist_ok=True)
+cv2.imwrite(output_image, img)
+print(f"Decoded image saved to: {output_image}")
