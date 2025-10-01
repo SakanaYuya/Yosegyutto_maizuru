@@ -1,0 +1,331 @@
+/* src/pages/people.css */
+
+.people-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  animation: fadeIn 0.6s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 戻るボタン */
+.back-button {
+  padding: 10px 20px;
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  color: #333;
+  font-size: 0.95rem;
+  cursor: pointer;
+  margin-bottom: 30px;
+  transition: background-color 0.2s ease;
+  animation: slideInLeft 0.5s ease;
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.back-button:hover {
+  background-color: #e8e8e8;
+}
+
+/* メインコンテンツエリア */
+.people-main-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 60px;
+  animation: fadeInUp 0.7s ease 0.2s backwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 代表作品画像セクション */
+.people-image-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.people-main-image {
+  width: 100%;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  object-fit: cover;
+  aspect-ratio: 4 / 3;
+}
+
+.representative-work-title {
+  font-size: 0.95rem;
+  color: #666;
+  text-align: center;
+  margin: 0;
+}
+
+.no-image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background-color: #f5f5f5;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  font-size: 1.1rem;
+}
+
+/* 職人情報セクション */
+.people-info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.people-name {
+  font-size: 2.5rem;
+  color: #333;
+  margin: 0;
+  font-weight: 700;
+}
+
+.people-profile h3 {
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.people-profile p {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #555;
+  margin: 0;
+}
+
+/* 自由記述欄 */
+.people-free-words {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  border-left: 4px solid #333;
+}
+
+.people-free-words h3 {
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.people-free-words p {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #555;
+  margin: 0;
+  font-style: italic;
+}
+
+/* タグセクション */
+.people-tags-section h4 {
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.people-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.people-tag {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: #e0e0e0;
+  color: #555;
+  font-size: 0.9rem;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+/* 関連作品セクション */
+.related-works-section {
+  margin-top: 60px;
+  padding-top: 40px;
+  border-top: 2px solid #f0f0f0;
+  animation: fadeInUp 0.8s ease 0.4s backwards;
+}
+
+.section-title {
+  font-size: 1.8rem;
+  color: #333;
+  margin-bottom: 30px;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* 作品グリッド */
+.works-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.work-card {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  animation: fadeInScale 0.5s ease backwards;
+}
+
+.work-card:nth-child(1) { animation-delay: 0.5s; }
+.work-card:nth-child(2) { animation-delay: 0.6s; }
+.work-card:nth-child(3) { animation-delay: 0.7s; }
+.work-card:nth-child(4) { animation-delay: 0.8s; }
+.work-card:nth-child(5) { animation-delay: 0.9s; }
+.work-card:nth-child(6) { animation-delay: 1s; }
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.work-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.work-image-wrapper {
+  width: 100%;
+  padding-top: 75%;
+  position: relative;
+  overflow: hidden;
+  background-color: #f5f5f5;
+}
+
+.work-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.work-content {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.work-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.work-description {
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.work-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.work-tag {
+  display: inline-block;
+  padding: 4px 10px;
+  background-color: #e0e0e0;
+  color: #555;
+  font-size: 0.85rem;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 900px) {
+  .people-main-content {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  
+  .works-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  
+  .people-name {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .people-container {
+    padding: 20px 16px;
+  }
+  
+  .people-main-content {
+    gap: 24px;
+    margin-bottom: 40px;
+  }
+  
+  .people-name {
+    font-size: 1.8rem;
+  }
+  
+  .works-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .section-title {
+    font-size: 1.5rem;
+  }
+}

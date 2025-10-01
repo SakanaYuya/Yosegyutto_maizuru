@@ -22,19 +22,3 @@
 .box:hover {
   background-color: #c0c0c0;
 }
-
-.tag-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  max-height: 2.5em; /* 2行分程度の高さに制限 */
-  overflow: hidden;  /* 2行を超える場合は非表示 */
-}
-
-.tag {
-  background-color: #ccc;
-  border-radius: 4px;
-  padding: 2px 6px;
-  font-size: 0.8em;
-  white-space: nowrap;
-}

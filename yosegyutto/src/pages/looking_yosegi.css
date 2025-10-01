@@ -1,0 +1,321 @@
+/* src/pages/looking_yosegi.css */
+
+.looking-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.looking-container h1 {
+  font-size: 2rem;
+  margin-bottom: 40px;
+  color: #333;
+  text-align: center;
+}
+
+/* 検索エリア全体のラッパー */
+.search-wrapper {
+  position: relative;
+  max-width: 800px;
+  margin: 0 auto 40px;
+  z-index: 100;
+}
+
+/* 検索セクション */
+.search-section {
+  position: relative;
+  background: #fff;
+  border-radius: 50px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  padding: 8px 24px;
+  transition: all 0.3s ease;
+}
+
+.search-input {
+  width: 100%;
+  padding: 16px 0;
+  font-size: 1.1rem;
+  border: none;
+  outline: none;
+  background: transparent;
+}
+
+.search-input::placeholder {
+  color: #999;
+}
+
+/* 選択中のタグ（検索バー内） */
+.selected-tags-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+  padding-bottom: 8px;
+}
+
+.selected-tag-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background-color: #333;
+  color: #fff;
+  font-size: 0.9rem;
+  border-radius: 20px;
+}
+
+.remove-tag-inline {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  margin-left: 2px;
+}
+
+.remove-tag-inline:hover {
+  opacity: 0.7;
+}
+
+/* タグ選択ドロップダウン */
+.tag-dropdown {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 0;
+  right: 0;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  padding: 20px;
+  animation: slideDown 0.3s ease;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tag-dropdown-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.tag-dropdown-header span {
+  font-weight: 600;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.clear-all-dropdown {
+  padding: 6px 14px;
+  background-color: #f5f5f5;
+  border: none;
+  color: #555;
+  font-size: 0.85rem;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.clear-all-dropdown:hover {
+  background-color: #e0e0e0;
+}
+
+.tag-dropdown-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.tag-option {
+  padding: 8px 16px;
+  background-color: #f5f5f5;
+  border: 2px solid transparent;
+  color: #555;
+  font-size: 0.9rem;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tag-option:hover {
+  background-color: #e8e8e8;
+}
+
+.tag-option.active {
+  background-color: #333;
+  border-color: #333;
+  color: #fff;
+}
+
+/* 背景オーバーレイ */
+.search-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 50;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* 検索結果の件数 */
+.result-count {
+  margin-bottom: 24px;
+  color: #666;
+  font-size: 0.95rem;
+  text-align: center;
+}
+
+/* 結果なし表示 */
+.no-results {
+  text-align: center;
+  padding: 60px 20px;
+  color: #999;
+  font-size: 1.1rem;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 20px;
+}
+
+/* カードスタイル */
+.people-card {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+}
+
+.people-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* 画像エリア */
+.card-image-wrapper {
+  width: 100%;
+  padding-top: 75%; /* 4:3 アスペクト比 */
+  position: relative;
+  overflow: hidden;
+  background-color: #f5f5f5;
+}
+
+.card-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* カード情報エリア */
+.card-content {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.card-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+/* タグエリア */
+.tag-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  max-height: 52px; /* 2行分の高さに制限 */
+  overflow: hidden;
+}
+
+.tag {
+  display: inline-block;
+  padding: 4px 10px;
+  background-color: #e0e0e0;
+  color: #555;
+  font-size: 0.85rem;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 900px) {
+  .grid-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  
+  .search-wrapper {
+    max-width: 600px;
+  }
+}
+
+@media (max-width: 600px) {
+  .grid-container {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .looking-container {
+    padding: 20px 16px;
+  }
+  
+  .looking-container h1 {
+    font-size: 1.5rem;
+  }
+  
+  .search-wrapper {
+    max-width: 100%;
+  }
+  
+  .search-section {
+    padding: 6px 16px;
+  }
+  
+  .search-input {
+    font-size: 1rem;
+    padding: 12px 0;
+  }
+  
+  .tag-dropdown {
+    padding: 16px;
+  }
+}

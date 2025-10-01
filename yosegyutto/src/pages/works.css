@@ -1,0 +1,112 @@
+/* src/pages/works.css */
+
+.work-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  animation: fadeIn 0.6s ease;
+}
+
+.back-button {
+  padding: 10px 20px;
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  color: #333;
+  font-size: 0.95rem;
+  cursor: pointer;
+  margin-bottom: 30px;
+  transition: background-color 0.2s ease;
+}
+
+.back-button:hover {
+  background-color: #e8e8e8;
+}
+
+.work-main-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+
+.work-image-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.work-main-image {
+  width: 100%;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  object-fit: cover;
+  aspect-ratio: 4/3;
+}
+
+.work-info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.work-name {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #333;
+  margin: 0;
+}
+
+.work-profile h3 {
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.work-profile p {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #555;
+  margin: 0;
+}
+
+.work-tags-section h4 {
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.work-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.work-tag {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: #e0e0e0;
+  color: #555;
+  font-size: 0.9rem;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+/* レスポンシブ */
+@media (max-width: 900px) {
+  .work-main-content {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+}
+
+@media (max-width: 600px) {
+  .work-container {
+    padding: 20px 16px;
+  }
+
+  .work-main-content {
+    gap: 24px;
+  }
+}
