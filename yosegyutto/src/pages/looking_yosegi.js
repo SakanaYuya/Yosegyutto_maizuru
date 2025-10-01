@@ -38,6 +38,14 @@ function LookingYosegi() {
   return (
     <div className="looking-container">
       <h1>寄木職人一覧</h1>
+
+      {/*ホームに戻るボタン */}
+      <button
+        className="back-button"
+        onClick={() => navigate("/home")}
+      >
+        ホームに戻る
+      </button>
       
       {/* 検索エリア全体 */}
       <div className="search-wrapper">
