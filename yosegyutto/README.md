@@ -1,11 +1,13 @@
 # Getting Started with Create React App
-
+# React動作用read.mdファイル
+## Reactのversionは18.3.1環境です
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
 
 In the project directory, you can run:
 
+## 基本動作はnpm startで実行可能です
 ### `npm start`
 
 Runs the app in the development mode.\
