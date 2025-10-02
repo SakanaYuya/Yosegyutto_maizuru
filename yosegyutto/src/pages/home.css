@@ -1,24 +1,261 @@
+/* src/pages/home.css */
+
 .home {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;/* 画面全体を埋める */
+  background: linear-gradient(135deg, #f5f7fa 0%, #e8ebf0 100%);
+  overflow: hidden;
   display: flex;
-  justify-content: center;
-  gap: 40px;
-  margin-top: 100px;
+  flex-direction: column;
 }
 
-.box {
-  width: 200px;
-  height: 120px;
-  background-color: #e0e0e0;
-  border-radius: 12px;
+/* 流れる画像エリア（上部） */
+.flowing-images-top {
+  position: absolute;
+  top: 5%;/* 上端から5%下げて配置 */
+  left: 0;
+  width: 100%;
+  height: 80px;
+  overflow: hidden;
+  opacity: 0.15;/* 薄く表示 */
+  z-index: 1; /* 背景扱い */
+}
+
+.flowing-track {
+  display: flex;
+  gap: 40px;/* 画像同士の間隔 */
+  animation: flowRight 60s linear infinite;/* 右方向に流れるアニメーション */
+}
+
+@keyframes flowRight {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* 流れる画像エリア（下部） */
+.flowing-images-bottom {
+  position: absolute;
+  bottom: 5%;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  overflow: hidden;
+  opacity: 0.15;
+  z-index: 1;
+}
+
+.flowing-track-reverse {
+  display: flex;
+  gap: 40px;
+  animation: flowLeft 60s linear infinite;
+}
+
+@keyframes flowLeft {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.flowing-image {
+  width: 100px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+/* メインコンテンツ */
+.home-content {
+  position: relative;
+  z-index: 10;/* 背景より上に表示 */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;/* 中央揃え */
+  justify-content: flex-start;
+  padding: 50px 20px 40px;
+}
+
+/* ロゴコンテナ */
+.logo-container {
+  margin-bottom: 60px;
+  animation: logoFadeIn 1.2s ease;
+}
+
+
+@keyframes logoFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.8);/* 少し小さく上から */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1.0);/* 本来のサイズに */
+
+  }
+}
+
+.main-logo {
+  max-width: 500px;/* ロゴの最大幅（ここを変更するとサイズ調整可能） */
+  width: 100%;
+  height: auto;/* 縦横比維持 */
+  filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.1));
+}
+
+/* アクションボタンエリア */
+.action-buttons {
+  display: flex;
+  gap: 60px; /* ← これがボタン間の余白 */
+  animation: buttonsFadeIn 1s ease 0.4s backwards;
+}
+
+@keyframes buttonsFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* アクションボックス */
+.action-box {
+  position: relative;
+  width: 200px;/* ← ボタンの横幅 */
+  height: 100px;/* ← ボタンの縦幅 */
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);/* ホバー時のアニメ */
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  font-size: 20px;
-  font-weight: bold;
-  transition: background-color 0.3s;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: visible;
+  z-index: 2;
 }
 
-.box:hover {
-  background-color: #c0c0c0;
+.action-box:hover {
+  transform: translateY(-8px) scale(1.02);/* 浮き上がる */
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+}
+
+.box-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #333;
+  transition: transform 0.4s ease;
+  z-index: 2;
+  position: relative;
+}
+
+.action-box:hover .box-title {
+  transform: translateY(0);
+}
+
+/* 説明ボックス */
+.description-box {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(51, 51, 51, 0.85);
+  backdrop-filter: blur(10px);
+  color: #fff;
+  padding: 40px 60px;
+  height: 20%;       /* 全画面に対する高さ */
+  max-height: 300px; /* オプション：上限 */
+  transform: translateY(100%); /* 初期状態は画面外 */
+  opacity: 0;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.description-box.show {
+  transform: translateY(0);/* 出てくる */
+  opacity: 1;
+}
+
+.description-box p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  margin: 0;
+  text-align: center;
+  max-width: 800px;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .main-logo {
+    max-width: 420px;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+    gap: 30px;
+  }
+  
+  .action-box {
+    width: 256px;
+    height: 115px;
+  }
+  
+  .logo-container {
+    margin-bottom: 50px;
+  }
+  
+  .flowing-images-top,
+  .flowing-images-bottom {
+    height: 60px;
+    opacity: 0.1;
+  }
+  
+  .flowing-image {
+    width: 80px;
+    height: 60px;
+  }
+  
+  .description-box {
+    padding: 30px 40px;
+  }
+  
+  .description-box p {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 800px) {
+  .main-logo {
+    max-width: 800px;
+  }
+  
+  .action-box {
+    width: 224px;
+    height: 100px;
+  }
+  
+  .box-title {
+    font-size: 1.2rem;
+  }
+  
+  .description-box {
+    padding: 25px 30px;
+  }
+  
+  .description-box p {
+    font-size: 0.9rem;
+  }
 }
