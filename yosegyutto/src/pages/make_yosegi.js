@@ -1,8 +1,12 @@
+import React from "react";
+import "../App.css";
+import UnityApp from "../components/UnityApp";
+
 function MakeYosegi() {
   return (
     <div>
-      <h1>寄木を作るページ</h1>
-      <p>ここに寄木作成の機能を実装していきます。</p>
+      <h1>Unity × React アプリ</h1>
+      <UnityApp />
     </div>
   );
 }
