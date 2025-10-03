@@ -164,7 +164,7 @@ function LookingYosegi() {
               >
                 <div className="mode-button-title">寄木提案</div>
                 <div className="mode-button-desc">
-                  あなたに最適な作品を提案
+                  AIがあなたに最適な作品を提案
                 </div>
               </button>
             </div>
@@ -259,7 +259,7 @@ function LookingYosegi() {
             <div className="proposal-content">
               <p className="proposal-description">
                 あなたのロール情報をもとに、新しい作品を提案します。<br/>
-                タグ情報を参照しながら、アルゴリズムが参考となる作品を1〜2件を選びます。
+                あなたのロールに含まれていないタグを持つ作品から、ランダムに1〜2件を選びます。
               </p>
 
               {/* 模様の提案ボタン */}
@@ -281,7 +281,7 @@ function LookingYosegi() {
                       <div
                         key={work.id}
                         className="proposed-work-card"
-                        onClick={() => navigate(`/people/${work.authorId}`)}
+                        onClick={() => navigate(`/works/${work.id}`)}
                       >
                         <div className="card-image-wrapper">
                           <img
@@ -355,8 +355,8 @@ function LookingYosegi() {
                 key={work.id}
                 className="people-card"
                 onClick={() => {
-                  // 作品の作者ページに遷移
-                  navigate(`/people/${work.authorId}`);
+                  // 作品詳細ページに遷移
+                  navigate(`/works/${work.id}`);
                 }}
               >
                 <div className="card-image-wrapper">
