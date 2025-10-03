@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import yosegiPeopleData from "../data/yosegi_people_data";
 import yosegiWorkData from "../data/yosegi_work";
+import { getTags } from "../data/my_roll";
 import "../App.css";
 import "./looking_yosegi.css";
 
@@ -11,6 +12,7 @@ function LookingYosegi() {
   const [searchMode, setSearchMode] = useState(null); // null, 'select', 'general', 'proposal'
   const [searchText, setSearchText] = useState("");
   const [selectedTags, setSelectedTags] = useState([]);
+  const [proposedWorks, setProposedWorks] = useState([]);
 
   // 全タグを作品から抽出
   const allWorkTags = [...new Set(yosegiWorkData.flatMap(work => work.tags))];
@@ -18,9 +20,8 @@ function LookingYosegi() {
 
   // タグをカテゴリ別に分類
   const tagCategories = {
-    色: ["#白色系", "#黄色系", "#黒色系", "#赤色系", "#青色系", "#灰色系", "#緑色系", "#緑色系"],
-    材木: ["#みずき", "#けやき", "#ウォールナット", "#くるみ", "#パドック", "#あおはだ", "#さくら", "#パープルハート", "#黒檀", "#トウヘンボク", "#ほおのき", "#トレンガス", "#マンソニア"],
-    技法: ["#ヅク技法", "#ムク技法", "#木象嵌", "#重ね武象嵌","#挽き抜き象嵌"],
+    色: ["#白色系", "#茶系", "#黒系", "#赤系", "#青系"],
+    技法: [...allTechniques, "#組子", "#象嵌", "#彫刻"],
     タイプ: ["#日用品", "#小物", "#家具", "#大型", "#美術", "#実用"]
   };
 
@@ -49,13 +50,48 @@ function LookingYosegi() {
     setSearchMode(null);
     setSearchText("");
     setSelectedTags([]);
+    setProposedWorks([]);
+  };
+
+  // 模様の提案処理
+  const proposePatterns = () => {
+    // マイロールのタグを取得
+    const myRollTags = getTags();
+    console.log("マイロールのタグ:", myRollTags);
+
+    // マイロールのタグと完全に被らない作品をフィルタリング
+    const newWorks = yosegiWorkData.filter(work => {
+      // 作品のすべてのタグ（通常タグ + 技法タグ）
+      const workTags = [...work.tags, ...(work.use_tec || [])];
+      
+      // マイロールのタグが1つでも含まれていればfalse（除外）
+      const hasMyRollTag = workTags.some(tag => myRollTags.includes(tag));
+      
+      return !hasMyRollTag; // マイロールのタグが含まれていない作品のみtrue
+    });
+
+    console.log("マイロールと被らない作品:", newWorks.length, "件");
+
+    if (newWorks.length === 0) {
+      alert("あなたのロールと被らない作品が見つかりませんでした。");
+      setProposedWorks([]);
+      return;
+    }
+
+    // ランダムに1〜2個選択
+    const shuffled = [...newWorks].sort(() => Math.random() - 0.5);
+    const count = Math.min(Math.floor(Math.random() * 2) + 1, newWorks.length);
+    const selected = shuffled.slice(0, count);
+
+    setProposedWorks(selected);
+    console.log("提案作品:", selected);
   };
 
   return (
     <div className="looking-container">
       {/* ホームに戻るボタン（左上） */}
       <button className="back-button-top" onClick={() => navigate("/home")}>
-        ホームに戻る
+        ← ホームに戻る
       </button>
 
       <h1>寄木作品を探す</h1>
@@ -128,7 +164,7 @@ function LookingYosegi() {
               >
                 <div className="mode-button-title">寄木提案</div>
                 <div className="mode-button-desc">
-                  AIがあなたに最適な作品を提案
+                  あなたに最適な作品を提案
                 </div>
               </button>
             </div>
@@ -210,7 +246,7 @@ function LookingYosegi() {
         </>
       )}
 
-      {/* 寄木提案モード（未実装） */}
+      {/* 寄木提案モード */}
       {searchMode === 'proposal' && (
         <>
           <div className="search-overlay-full" onClick={resetSearch} />
@@ -219,12 +255,82 @@ function LookingYosegi() {
               <h2>寄木提案</h2>
               <button className="close-panel" onClick={resetSearch}>×</button>
             </div>
-            <div className="coming-soon">
-              <p>🎨 この機能は開発中です</p>
-              <p className="coming-soon-desc">
-                過去の作品パターンから未使用のデザインを提案したり、<br/>
-                あなたの好みに合わせた寄木作品をAIが推薦します。
+            
+            <div className="proposal-content">
+              <p className="proposal-description">
+                あなたのロール情報をもとに、新しい作品を提案します。<br/>
+                タグ情報を参照しながら、アルゴリズムが参考となる作品を1〜2件を選びます。
               </p>
+
+              {/* 模様の提案ボタン */}
+              <button 
+                className="propose-button"
+                onClick={proposePatterns}
+              >
+                模様の提案
+              </button>
+
+              {/* 提案結果 */}
+              {proposedWorks.length > 0 && (
+                <div className="proposed-works-section">
+                  <h3 className="proposed-title">
+                    あなたにおすすめの作品
+                  </h3>
+                  <div className="proposed-works-grid">
+                    {proposedWorks.map((work) => (
+                      <div
+                        key={work.id}
+                        className="proposed-work-card"
+                        onClick={() => navigate(`/people/${work.authorId}`)}
+                      >
+                        <div className="card-image-wrapper">
+                          <img
+                            src={work.image}
+                            alt={work.name}
+                            className="card-image"
+                          />
+                        </div>
+                        <div className="card-content">
+                          <h4 className="card-name">{work.name}</h4>
+                          <p className="work-description-preview">{work.description}</p>
+                          <div className="tag-container">
+                            {work.tags.map((tag, idx) => (
+                              <span key={idx} className="tag">
+                                {tag}
+                              </span>
+                            ))}
+                            {work.use_tec && work.use_tec.map((tec, idx) => (
+                              <span key={`tec-${idx}`} className="tag tag-technique">
+                                {tec}
+                              </span>
+                            ))}
+                          </div>
+                          <div className="new-tags-hint">
+                            <span className="hint-icon">💡</span>
+                            <span>新しいタグが含まれています</span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <button 
+                    className="re-propose-button"
+                    onClick={proposePatterns}
+                  >
+                    再提案する
+                  </button>
+                </div>
+              )}
+
+              {/* 提案前のメッセージ */}
+              {proposedWorks.length === 0 && (
+                <div className="no-proposal-yet">
+                  <p className="hint-text">
+                    「模様の提案」ボタンを押すと、<br/>
+                    あなたのロールに基づいた新しい作品が表示されます。
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </>
@@ -235,7 +341,7 @@ function LookingYosegi() {
         <>
           <div className="results-header">
             <button className="back-to-search" onClick={() => setSearchMode('general')}>
-              検索条件を変更
+              ← 検索条件を変更
             </button>
             <div className="result-count">
               {filteredWorks.length}件の作品が見つかりました

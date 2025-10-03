@@ -1,0 +1,261 @@
+/* src/pages/tanegi_lib.css */
+
+.tanegi-lib-container {
+  position: relative;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e8ebf0 100%);
+  padding: 40px 20px;
+}
+
+/* 戻るボタン */
+.back-button-tanegi {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding: 10px 20px;
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  color: #333;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  z-index: 10;
+}
+
+.back-button-tanegi:hover {
+  background-color: #e8e8e8;
+}
+
+/* タイトル */
+.tanegi-main-title {
+  font-size: 2.5rem;
+  color: #333;
+  margin-bottom: 12px;
+  margin-top: 60px;
+  text-align: center;
+  animation: fadeInDown 0.8s ease;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tanegi-subtitle {
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 60px;
+  text-align: center;
+  animation: fadeIn 1s ease 0.3s backwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* セクション */
+.pattern-section {
+  margin-bottom: 80px;
+  animation: fadeInUp 0.8s ease backwards;
+}
+
+.pattern-section:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.pattern-section:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.section-title {
+  font-size: 1.8rem;
+  color: #333;
+  margin-bottom: 24px;
+  padding-left: 20px;
+  border-left: 5px solid #667eea;
+  font-weight: 700;
+}
+
+/* 水平スクロールラッパー */
+.horizontal-scroll-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 20px 0;
+  /* カスタムスクロールバー */
+  scrollbar-width: thin;
+  scrollbar-color: #667eea #e0e0e0;
+}
+
+.horizontal-scroll-wrapper::-webkit-scrollbar {
+  height: 10px;
+}
+
+.horizontal-scroll-wrapper::-webkit-scrollbar-track {
+  background: #e0e0e0;
+  border-radius: 10px;
+}
+
+.horizontal-scroll-wrapper::-webkit-scrollbar-thumb {
+  background: #667eea;
+  border-radius: 10px;
+}
+
+.horizontal-scroll-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #5568d3;
+}
+
+/* カードコンテナ */
+.pattern-cards-container {
+  display: flex;
+  gap: 24px;
+  padding: 0 20px 20px 20px;
+}
+
+/* パターンカード */
+.pattern-card {
+  flex: 0 0 320px;
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.pattern-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* 画像エリア */
+.pattern-image-wrapper {
+  width: 100%;
+  height: 240px;
+  overflow: hidden;
+  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pattern-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.pattern-card:hover .pattern-image {
+  transform: scale(1.05);
+}
+
+/* カード情報 */
+.pattern-info {
+  padding: 20px;
+}
+
+.pattern-name {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.pattern-description {
+  font-size: 0.95rem;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+.pattern-date {
+  font-size: 0.85rem;
+  color: #999;
+  margin: 0;
+}
+
+/* 空の状態 */
+.no-patterns {
+  flex: 0 0 100%;
+  padding: 60px 20px;
+  text-align: center;
+  color: #999;
+  font-size: 1.1rem;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .tanegi-main-title {
+    font-size: 2rem;
+    margin-top: 40px;
+  }
+
+  .tanegi-subtitle {
+    font-size: 1rem;
+    margin-bottom: 40px;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+    padding-left: 16px;
+  }
+
+  .pattern-card {
+    flex: 0 0 280px;
+  }
+
+  .pattern-image-wrapper {
+    height: 200px;
+  }
+
+  .pattern-section {
+    margin-bottom: 60px;
+  }
+}
+
+@media (max-width: 480px) {
+  .tanegi-lib-container {
+    padding: 20px 10px;
+  }
+
+  .tanegi-main-title {
+    font-size: 1.8rem;
+  }
+
+  .section-title {
+    font-size: 1.3rem;
+  }
+
+  .pattern-card {
+    flex: 0 0 260px;
+  }
+
+  .pattern-cards-container {
+    gap: 16px;
+    padding: 0 10px 20px 10px;
+  }
+}

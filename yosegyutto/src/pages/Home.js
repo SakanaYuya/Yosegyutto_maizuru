@@ -44,8 +44,8 @@ function Home() {
 
           <div
             className="action-box"
-            onClick={() => navigate("/looking")}
-            onMouseEnter={() => setHoveredBox("looking")}
+            onClick={() => navigate("/search")}
+            onMouseEnter={() => setHoveredBox("search")}
             onMouseLeave={() => setHoveredBox(null)}
           >
             <div className="box-title">寄木を探す</div>
@@ -61,7 +61,7 @@ function Home() {
         </p>
       </div>
 
-      <div className={`description-box ${hoveredBox === "looking" ? "show" : ""}`}>
+      <div className={`description-box ${hoveredBox === "search" ? "show" : ""}`}>
         <p>
           全国の寄木職人とその作品を豊富に探索できます。<br/>
           伝統技術と現代デザインが融合した、唯一無二の作品に出会えます。

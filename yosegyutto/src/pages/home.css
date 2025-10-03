@@ -157,6 +157,8 @@
   transition: transform 0.4s ease;
   z-index: 2;
   position: relative;
+  text-align: center; /* ここを追加！ */
+  line-height: 1.4;   /* 行間も調整するとバランス良い */
 }
 
 .action-box:hover .box-title {
