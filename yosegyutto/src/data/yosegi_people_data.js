@@ -5,8 +5,8 @@ import yosegiDummy from "../images/yosegi_dummy.jpeg";
 const yosegiPeopleData = [
   {
     id: 1,
-    work_name: "作品A",           // 代表作品名（任意で複数でも可）
-    name: "作者A",               // 職人名
+    work_name: "",           // 代表作品名（任意で複数でも可）
+    name: "本間 博丈",               // 職人名
     image: yosegiDummy,          // 職人の代表画像
     profile: "京都在住の寄木職人。伝統技法を守りつつ現代的デザインも手がける。",
     free_words:"とても有名な職人",
@@ -16,7 +16,7 @@ const yosegiPeopleData = [
   {
     id: 2,
     work_name: "作品B",
-    name: "作者B",
+    name: "金指 勝悦",
     image: yosegiDummy,
     profile: "木材の特性を活かした小物作りが得意。",
     representativeWorks: [2, 4],
@@ -25,7 +25,7 @@ const yosegiPeopleData = [
   {
     id: 3,
     work_name: "作品C",
-    name: "作者C",
+    name: "露木 清勝",
     image: yosegiDummy,
     profile: "大型の家具寄木作品も手がける職人。",
     representativeWorks: [5],

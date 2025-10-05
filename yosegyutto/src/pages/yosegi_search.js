@@ -22,7 +22,7 @@ function YosegiSearch() {
     },
     {
       id: "looking",
-      title: "寄木作品を探す",
+      title: "寄木職人のきろく",
       path: "/search/looking",
       description: "寄木作品の検索と新規柄の提案を受けられます。タグや技法から作品を絞り込んで探すこともできます。"
     }
@@ -35,7 +35,7 @@ function YosegiSearch() {
         ホームに戻る
       </button>
 
-      <h1 className="search-main-title">寄木データベース</h1>
+      <h1 className="search-main-title">よせぎゅっとコミュニティ</h1>
       <p className="search-subtitle">作成した模様や作品の検索が可能です</p>
 
       {/* 検索オプションボタン */}

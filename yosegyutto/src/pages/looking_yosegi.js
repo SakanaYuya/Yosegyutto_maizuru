@@ -91,10 +91,10 @@ function LookingYosegi() {
     <div className="looking-container">
       {/* ホームに戻るボタン（左上） */}
       <button className="back-button-top" onClick={() => navigate("/home")}>
-        ← ホームに戻る
+        ホームに戻る
       </button>
 
-      <h1>寄木作品を探す</h1>
+      <h1>寄木職人のきろく</h1>
 
       {/* 初期状態：寄木作品を探すボタン */}
       {searchMode === null && (
@@ -110,7 +110,7 @@ function LookingYosegi() {
 
           {/* 全職人カード表示 */}
           <div className="all-people-section">
-            <h2 className="section-subtitle">すべての職人</h2>
+            <h2 className="section-subtitle">直近の作品</h2>
             <div className="grid-container">
               {yosegiPeopleData.map((person) => (
                 <div
@@ -164,7 +164,7 @@ function LookingYosegi() {
               >
                 <div className="mode-button-title">寄木提案</div>
                 <div className="mode-button-desc">
-                  AIがあなたに最適な作品を提案
+                  最適な作品を提案
                 </div>
               </button>
             </div>
