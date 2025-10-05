@@ -23,6 +23,40 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
+    <script>
+    window.OnCaptureSaved = function (fileName, base64Data) {
+      console.log("Unity -> OnCaptureSaved:", fileName);
+
+      // base64 -> Blob
+      const byteCharacters = atob(base64Data);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: "image/png" });
+
+      // 1) 自動ダウンロード（ユーザーPCへ保存）
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = fileName;
+      a.style.display = "none";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+      // 2) React でプレビュー表示するためのURLを保存 + イベント通知
+      window.latestCapturedURL = url;
+      window.dispatchEvent(new CustomEvent('unity-capture', { detail: { fileName, url } }));
+
+      // 3) （任意）サーバにアップロードしたい場合は fetch で POST する
+      // const form = new FormData();
+      // form.append('file', blob, fileName);
+      // fetch('/upload', { method:'POST', body:form });
+    };
+    </script>
+
     <title>React App</title>
   </head>
   <body>
