@@ -10,6 +10,15 @@ function DukuLib() {
   const [loading, setLoading] = useState(true);
   const [selectedPattern, setSelectedPattern] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [notification, setNotification] = useState({ show: false, message: '', type: '' });
+
+  // 通知を表示
+  const showNotification = (message, type) => {
+    setNotification({ show: true, message, type });
+    setTimeout(() => {
+      setNotification({ show: false, message: '', type: '' });
+    }, 3000);
+  };
 
   // JSONファイルから画像情報を読み込む関数
   const loadPatterns = useCallback(async (folder, setter) => {
@@ -67,7 +76,7 @@ function DukuLib() {
     if (!selectedPattern) return;
 
     try {
-      const response = await fetch('/api/share-image', {
+      const response = await fetch('http://localhost:5000/api/share-image', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -79,7 +88,7 @@ function DukuLib() {
       });
 
       if (response.ok) {
-        alert('共有しました!');
+        showNotification('共有しました！', 'success');
         handleCloseModal();
         // データを再読み込み
         await Promise.all([
@@ -87,11 +96,11 @@ function DukuLib() {
           loadPatterns('public', setPublicPatterns)
         ]);
       } else {
-        alert('共有に失敗しました');
+        showNotification('共有に失敗しました', 'error');
       }
     } catch (error) {
       console.error('Share error:', error);
-      alert('共有に失敗しました');
+      showNotification('共有に失敗しました', 'error');
     }
   };
 
@@ -104,7 +113,7 @@ function DukuLib() {
     }
 
     try {
-      const response = await fetch('/api/delete-image', {
+      const response = await fetch('http://localhost:5000/api/delete-image', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -116,16 +125,16 @@ function DukuLib() {
       });
 
       if (response.ok) {
-        alert('削除しました!');
+        showNotification('削除しました！', 'success');
         handleCloseModal();
         // データを再読み込み
         await loadPatterns('mine', setMinePatterns);
       } else {
-        alert('削除に失敗しました');
+        showNotification('削除に失敗しました', 'error');
       }
     } catch (error) {
       console.error('Delete error:', error);
-      alert('削除に失敗しました');
+      showNotification('削除に失敗しました', 'error');
     }
   };
 
@@ -230,6 +239,13 @@ function DukuLib() {
               </button>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* 通知 */}
+      {notification.show && (
+        <div className={`notification ${notification.type}`}>
+          {notification.message}
         </div>
       )}
     </div>
