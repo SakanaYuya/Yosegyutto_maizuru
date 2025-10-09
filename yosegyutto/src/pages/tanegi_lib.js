@@ -1,5 +1,5 @@
 // src/pages/tanegi_lib.js
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./tanegi_lib.css";
 
@@ -148,15 +148,16 @@ function TanegiLib() {
 
   return (
     <div className="tanegi-lib-container">
-      {/* 戻るボタン */}
       <button className="back-button-tanegi" onClick={() => navigate("/search")}>
         検索に戻る
       </button>
 
       <h1 className="tanegi-main-title">単位模様ライブラリ</h1>
-      <p className="tanegi-subtitle">作成した単位模様/他人が作成した単位模様が閲覧できます</p>
+      <p className="tanegi-subtitle">
+        作成した単位模様/他人が作成した単位模様が閲覧できます
+      </p>
 
-      {/* あなたが作成した単位模様 */}
+      {/* mine セクション */}
       <section className="pattern-section">
         <h2 className="section-title">あなたが作成した単位模様</h2>
         <div className="horizontal-scroll-wrapper">
@@ -183,15 +184,13 @@ function TanegiLib() {
                 </div>
               ))
             ) : (
-              <div className="no-patterns">
-                まだ単位模様が作成されていません
-              </div>
+              <div className="no-patterns">まだ単位模様が作成されていません</div>
             )}
           </div>
         </div>
       </section>
 
-      {/* 最近作られた単位模様 */}
+      {/* public セクション */}
       <section className="pattern-section">
         <h2 className="section-title">最近作られた単位模様</h2>
         <div className="horizontal-scroll-wrapper">
@@ -214,9 +213,7 @@ function TanegiLib() {
                 </div>
               ))
             ) : (
-              <div className="no-patterns">
-                公開されている単位模様がありません
-              </div>
+              <div className="no-patterns">公開されている単位模様がありません</div>
             )}
           </div>
         </div>

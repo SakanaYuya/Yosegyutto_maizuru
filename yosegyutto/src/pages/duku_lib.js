@@ -44,6 +44,7 @@ function DukuLib() {
     }
   }, []);
 
+  // --- 🚀 初回読み込み ---
   useEffect(() => {
     const loadAllPatterns = async () => {
       setLoading(true);
@@ -183,9 +184,7 @@ function DukuLib() {
                 </div>
               ))
             ) : (
-              <div className="no-patterns">
-                まだヅクが作成されていません
-              </div>
+              <div className="no-patterns">まだヅクが作成されていません</div>
             )}
           </div>
         </div>
@@ -214,9 +213,7 @@ function DukuLib() {
                 </div>
               ))
             ) : (
-              <div className="no-patterns">
-                公開されているヅクがありません
-              </div>
+              <div className="no-patterns">公開されているヅクがありません</div>
             )}
           </div>
         </div>
