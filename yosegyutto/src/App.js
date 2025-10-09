@@ -8,7 +8,7 @@ import LookingYosegi from "./pages/looking_yosegi"; // 既存
 import DukuLib from "./pages/duku_lib";             // 新規
 import TanegiLib from "./pages/tanegi_lib";         // 新規
 import People from "./pages/people";                // 職人詳細ページ
-import Works from "./pages/works";  
+import Works from "./pages/works";
 import UnityCanvas from "./pages/UnityCanvas";                 // 作品詳細ページ
 
 function App() {
