@@ -1,5 +1,5 @@
 // src/pages/tanegi_lib.js
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import "./tanegi_lib.css";
 

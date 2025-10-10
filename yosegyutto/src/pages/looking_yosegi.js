@@ -15,7 +15,7 @@ function LookingYosegi() {
   const [proposedWorks, setProposedWorks] = useState([]);
 
   // 全タグを作品から抽出
-  const allWorkTags = [...new Set(yosegiWorkData.flatMap(work => work.tags))];
+  //const allWorkTags = [...new Set(yosegiWorkData.flatMap(work => work.tags))];
   const allTechniques = [...new Set(yosegiWorkData.flatMap(work => work.use_tec || []))];
 
   // タグをカテゴリ別に分類
