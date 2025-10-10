@@ -3,48 +3,44 @@ import { Unity, useUnityContext } from "react-unity-webgl";
 import axios from "axios";
 
 function UnityCanvas() {
-  const { unityProvider } = useUnityContext({
-    // ファイル名を自分のものに正確に合わせる
+  const { unityProvider, addEventListener, removeEventListener } = useUnityContext({
     loaderUrl: "Build/yosegyutoWebGL.loader.js",
     dataUrl: "Build/yosegyutoWebGL.data",
     frameworkUrl: "Build/yosegyutoWebGL.framework.js",
     codeUrl: "Build/yosegyutoWebGL.wasm",
   });
 
-  // Unityからデータが送られてきたときの処理
+  // handleUnityCapture関数は変更なし
   const handleUnityCapture = useCallback(async (event) => {
-    const { fileName, base64Data } = event.detail;
-    console.log(`Unityから画像データを受信: ${fileName}`);
+    const { fileName, base64Data, targetFolder } = event.detail;
+    console.log(`Unityから画像データを受信: ${fileName} -> 保存先: ${targetFolder}`);
 
     try {
-      // サーバーのAPIエンドポイントに画像データをPOSTで送信
-      const response = await axios.post("http://localhost:3001/upload-image", {
+      await axios.post("http://localhost:3001/upload-image", {
         fileName: fileName,
         imageData: base64Data,
+        targetFolder: targetFolder
       });
-
-      console.log("サーバーからの応答:", response.data);
-      alert("画像のアップロードに成功しました！");
-
+      alert("画像のアップロードに成功！");
     } catch (error) {
-      console.error("画像のアップロード中にエラーが発生しました:", error);
-      alert("画像のアップロードに失敗しました。");
+      console.error("アップロードエラー:", error); // エラー内容をコンソールに表示
+      alert("アップロードに失敗しました。");
     }
-  }, []);
+  }, []); // ここは空のままでOKです (useCallbackの挙動として正しい)
 
-  // イベントリスナーを登録・解除
+  // ★★★ ここのuseEffectの書き方を修正します ★★★
   useEffect(() => {
+    // グローバルなwindowオブジェクトではなく、
+    // react-unity-webglが提供するイベントリスナーを使う方が安全で確実です。
+    // しかし、今回は元の仕組みを活かすため、windowを使い続けます。
     window.addEventListener("unityCaptureReady", handleUnityCapture);
     return () => {
       window.removeEventListener("unityCaptureReady", handleUnityCapture);
     };
+    // 依存配列にhandleUnityCaptureを追加します。
   }, [handleUnityCapture]);
 
-  return (
-    <div className="unity-container">
-      <Unity unityProvider={unityProvider} style={{ width: "100%", height: "100%" }} />
-    </div>
-  );
+  return <Unity unityProvider={unityProvider} style={{ width: "100%", height: "100%" }} />;
 }
 
 export default UnityCanvas;

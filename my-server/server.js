@@ -10,16 +10,24 @@ app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 
 app.post('/upload-image', (req, res) => {
-  const { fileName, imageData } = req.body;
-  if (!fileName || !imageData) {
-    return res.status(400).send({ message: 'データがありません。' });
+  // ★ 変更点：リクエストから targetFolder も受け取る
+  const { fileName, imageData, targetFolder } = req.body;
+
+  if (!fileName || !imageData || !targetFolder) {
+    return res.status(400).send({ message: '必要なデータが不足しています。' });
+  }
+  
+  // 安全対策：意図しないフォルダへの書き込みを防ぐ
+  const allowedFolders = ['tanni_images/mine', 'duku_imagas/mine'];
+  if (!allowedFolders.includes(targetFolder)) {
+      return res.status(400).send({ message: '許可されていない保存先です。' });
   }
 
   const base64Data = imageData.replace(/^data:image\/\w+;base64,/, '');
   const dataBuffer = Buffer.from(base64Data, 'base64');
   
-  // ▼▼▼ ご希望のパスに修正しました ▼▼▼
-  const savePath = path.join(__dirname, '..', 'yosegyutto', 'public', 'tanni_images', 'mine', fileName);
+  // ★ 変更点：targetFolderを使って動的にパスを組み立てる
+  const savePath = path.join(__dirname, '..', 'yosegyutto', 'public', targetFolder, fileName);
   
   const dir = path.dirname(savePath);
   if (!fs.existsSync(dir)) {
