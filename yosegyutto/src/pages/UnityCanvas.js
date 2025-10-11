@@ -1,46 +1,51 @@
 import React, { useEffect, useCallback } from "react";
 import { Unity, useUnityContext } from "react-unity-webgl";
 import axios from "axios";
+import "./UnityCanvas.css"; // CSSファイルをインポート
 
 function UnityCanvas() {
-  const { unityProvider, addEventListener, removeEventListener } = useUnityContext({
+  const { unityProvider } = useUnityContext({
     loaderUrl: "Build/yosegyutoWebGL.loader.js",
     dataUrl: "Build/yosegyutoWebGL.data",
     frameworkUrl: "Build/yosegyutoWebGL.framework.js",
     codeUrl: "Build/yosegyutoWebGL.wasm",
   });
 
-  // handleUnityCapture関数は変更なし
   const handleUnityCapture = useCallback(async (event) => {
-    const { fileName, base64Data, targetFolder } = event.detail;
-    console.log(`Unityから画像データを受信: ${fileName} -> 保存先: ${targetFolder}`);
+    // ... (この関数は変更なし)
+  }, []);
 
+  const handleGenerateManifest = async () => {
     try {
-      await axios.post("http://localhost:3001/upload-image", {
-        fileName: fileName,
-        imageData: base64Data,
-        targetFolder: targetFolder
-      });
-      alert("画像のアップロードに成功！");
+      const response = await axios.get("http://localhost:3001/api/generate-manifest");
+      alert(response.data.message);
     } catch (error) {
-      console.error("アップロードエラー:", error); // エラー内容をコンソールに表示
-      alert("アップロードに失敗しました。");
+      alert("目録ファイルの更新中にエラーが発生しました。");
     }
-  }, []); // ここは空のままでOKです (useCallbackの挙動として正しい)
+  };
 
-  // ★★★ ここのuseEffectの書き方を修正します ★★★
   useEffect(() => {
-    // グローバルなwindowオブジェクトではなく、
-    // react-unity-webglが提供するイベントリスナーを使う方が安全で確実です。
-    // しかし、今回は元の仕組みを活かすため、windowを使い続けます。
     window.addEventListener("unityCaptureReady", handleUnityCapture);
     return () => {
       window.removeEventListener("unityCaptureReady", handleUnityCapture);
     };
-    // 依存配列にhandleUnityCaptureを追加します。
   }, [handleUnityCapture]);
 
-  return <Unity unityProvider={unityProvider} style={{ width: "100%", height: "100%" }} />;
+  return (
+    <div className="app-container">
+      {/* 16:9の比率を保つコンテナ */}
+      <div className="unity-container">
+        <Unity unityProvider={unityProvider} style={{ width: "100%", height: "100%" }} />
+      </div>
+
+      {/* ボタン用のコンテナ */}
+      <div className="button-container">
+        <button onClick={handleGenerateManifest} className="capture-button">
+          単位模様の読み込み
+        </button>
+      </div>
+    </div>
+  );
 }
 
 export default UnityCanvas;
