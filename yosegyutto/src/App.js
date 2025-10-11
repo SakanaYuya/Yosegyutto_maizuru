@@ -2,13 +2,14 @@
 
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
-import MakeYosegi from "./pages/make_yosegi";
+//import MakeYosegi from "./pages/UnityCanvas"; // 変更: UnityCanvasをインポート
 import YosegiSearch from "./pages/yosegi_search";   // 変更: 新しい検索ページ
 import LookingYosegi from "./pages/looking_yosegi"; // 既存
 import DukuLib from "./pages/duku_lib";             // 新規
 import TanegiLib from "./pages/tanegi_lib";         // 新規
 import People from "./pages/people";                // 職人詳細ページ
-import Works from "./pages/works";                  // 作品詳細ページ
+import Works from "./pages/works";  
+import UnityCanvas from "./pages/UnityCanvas";                 // 作品詳細ページ
 
 function App() {
   return (
@@ -21,7 +22,7 @@ function App() {
         <Route path="/home" element={<Home />} />
 
         {/* 他の画面 */}
-        <Route path="/make" element={<MakeYosegi />} />
+        <Route path="/make" element={<UnityCanvas />} />
         
         {/* ★ 変更: 検索ページに接続 */}
         <Route path="/search" element={<YosegiSearch />} />
