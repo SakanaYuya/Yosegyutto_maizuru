@@ -3,7 +3,6 @@ import numpy as np
 import json
 import os
 import datetime
-import time
 from collections import deque
 import paramiko
 
@@ -18,12 +17,8 @@ SSH_USERNAME = "sshuser"
 SSH_PASSWORD = "2676"
 SSH_REMOTE_PATH = r"C:\Users\ysaka\programs\yosegi\Yosegyutto_maizuru\yosegyutto\public\json_data\real_time_test.json"
 
-# === 自動送信設定 ===
-AUTO_SEND_ENABLED = True  # 自動送信を有効にする場合はTrue
-AUTO_SEND_INTERVAL = 1.0  # 自動送信間隔（秒）例: 1.0 = 1秒ごと、0.5 = 0.5秒ごと
-
 # === 保存先ディレクトリ（ローカル保存用） ===
-output_dir = os.path.expanduser("~/yosegi_output")  # ホームディレクトリに保存
+output_dir = os.path.expanduser("~/yosegi_output")  # ラズパイのパス
 
 # === カメラ設定 ===
 CAMERA_INDEX = 0  # ラズパイのカメラ（通常は0）
@@ -393,36 +388,25 @@ def main():
     print(f"  カメラ: {CAMERA_WIDTH}x{CAMERA_HEIGHT} @ {CAMERA_FPS}fps")
     print(f"  検出範囲: {DETECTION_RATIO*100:.0f}% (中央)")
     print(f"  SSH送信: {'有効' if SSH_ENABLED else '無効'} -> {SSH_REMOTE_PATH if SSH_ENABLED else 'N/A'}")
-    print(f"  自動送信: {'有効' if AUTO_SEND_ENABLED else '無効'} (間隔: {AUTO_SEND_INTERVAL}秒)")
     print(f"  ローカル保存: {output_dir}")
     print("-" * 70)
     print("【操作方法】")
-    print("  sキー      : 検出結果を手動保存＆送信")
-    print("  aキー      : 自動送信のON/OFF切り替え")
+    print("  sキー      : 検出結果を保存＆送信")
     print("  dキー      : 検出オーバーレイのON/OFF切り替え")
     print("  +/-キー    : 検出範囲の拡大/縮小")
     print("  qキー/ESC  : 終了")
     print("=" * 70)
-    if AUTO_SEND_ENABLED:
-        print(f"自動送信モード: {AUTO_SEND_INTERVAL}秒ごとにデータを送信します")
-    else:
-        print("手動送信モード: Sキーで送信します")
     print("検出中... (緑=三角形, 青=正方形)")
     print()
 
     overlay_enabled = True
     detection_ratio = DETECTION_RATIO
-    auto_send_enabled = AUTO_SEND_ENABLED
     
     # 図形追跡オブジェクト
     tracker = ShapeTracker(
         stability_frames=STABILITY_FRAMES,
         tracking_threshold=TRACKING_THRESHOLD
     )
-    
-    # 自動送信用タイマー
-    last_send_time = time.time()
-    send_counter = 0
 
     while True:
         ret, frame = cap.read()
@@ -439,22 +423,10 @@ def main():
         tracking_count = len(tracker.tracked_shapes)
         display_img = draw_info_panel(display_img, detection_count, tracking_count)
         
-        # 自動送信処理
-        current_time = time.time()
-        if auto_send_enabled and SSH_ENABLED and (current_time - last_send_time >= AUTO_SEND_INTERVAL):
-            success = send_data_via_ssh(shapes_data)
-            if success:
-                send_counter += 1
-                print(f"[自動送信 #{send_counter}] 成功 (検出数: {detection_count['total']})")
-            else:
-                print(f"[自動送信 #{send_counter}] 失敗")
-            last_send_time = current_time
-        
         # 画面下部に操作ガイドを表示
-        auto_status = "ON" if auto_send_enabled else "OFF"
-        guide_text = f"[ S: Save | A: Auto({auto_status}) | D: Toggle | +/-: Area({detection_ratio*100:.0f}%) | Q: Quit ]"
+        guide_text = f"[ S: Save&Send | D: Toggle | +/-: Area({detection_ratio*100:.0f}%) | Q: Quit ]"
         cv2.putText(display_img, guide_text, (10, display_img.shape[0] - 10), 
-                   cv2.FONT_HERSHEY_SIMPLEX, 0.35, (200, 200, 200), 1)
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.4, (200, 200, 200), 1)
         
         cv2.imshow("Pattern Detection", display_img)
         
