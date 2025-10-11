@@ -85,19 +85,19 @@ debug3: set_sock_tos: set socket 3 IP_TOS 0x10
 import paramiko
 import json
 
-# 送信する最小データ
+#送信する最小データ
 data = {"test": 1}
 
-# JSON文字列化
+#JSON文字列化
 json_str = json.dumps(data)
 
-# SSH接続情報
+#SSH接続情報
 hostname = "sakanapc.local"
 username = "sshuser"
 password = "ここにsshuserのパスワード"
 remote_path = r"C:\Users\sshuser\real_time.json"
 
-# SSH & SFTPで送信
+#SSH & SFTPで送信
 ssh = paramiko.SSHClient()
 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 ssh.connect(hostname, username=username, password=password)
