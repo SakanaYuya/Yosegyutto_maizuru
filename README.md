@@ -106,6 +106,8 @@ ssh.close()
 
 print("送信完了")
 
+C:\Users\ysaka\programs\yosegi\Yosegyutto_maizuru\yosegyutto\public\json_data
+
 
 
 
