@@ -118,3 +118,5 @@ C:\Users\ysaka\programs\yosegi\Yosegyutto_maizuru\yosegyutto\public\json_data
 
 マージを実行　10/10
 unity.js確認
+
+watanabe
