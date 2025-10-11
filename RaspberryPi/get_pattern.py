@@ -369,8 +369,7 @@ def draw_info_panel(img, detection_count, tracking_count):
                font, 0.5, (0, 255, 255), 1)
     
     # 追跡情報
-    auto_status = "ON" if AUTO_SEND_ENABLED else "OFF"
-    track_text = f"Tracking: {tracking_count} | SSH: {'ON' if SSH_ENABLED else 'OFF'} | Auto: {auto_status}"
+    track_text = f"Tracking: {tracking_count} | SSH: {'ON' if SSH_ENABLED else 'OFF'}"
     cv2.putText(panel, track_text, (10, 75), 
                font, 0.4, (150, 150, 150), 1)
     
@@ -476,7 +475,7 @@ def main():
             with open(json_path, "w", encoding="utf-8") as f:
                 json.dump(shapes_data, f, indent=2, ensure_ascii=False)
 
-            print(f"\n[手動保存] {timestamp}")
+            print(f"\n[ローカル保存完了] {timestamp}")
             print(f"  画像: {img_path}")
             print(f"  JSON: {json_path}")
             print(f"  検出数: {detection_count['total']}個 "
@@ -491,16 +490,6 @@ def main():
                 else:
                     print(f"  ✗ リモート送信失敗")
             print()
-        
-        elif key == ord('a'):
-            auto_send_enabled = not auto_send_enabled
-            status = "ON" if auto_send_enabled else "OFF"
-            print(f"自動送信: {status}")
-            if auto_send_enabled:
-                print(f"  {AUTO_SEND_INTERVAL}秒間隔で送信を開始します")
-                last_send_time = time.time()  # タイマーリセット
-            else:
-                print(f"  自動送信を停止しました (送信回数: {send_counter})")
         
         elif key == ord('d'):
             overlay_enabled = not overlay_enabled
