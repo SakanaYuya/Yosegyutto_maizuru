@@ -50,4 +50,5 @@ def generate_images_public_json():
     print("\n完了しました!")
 
 if __name__ == "__main__":
+
     generate_images_public_json()
