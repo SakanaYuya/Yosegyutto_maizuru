@@ -1,6 +1,6 @@
-/* src/pages/tanegi_lib.css */
+/* src/pages/duku_lib.css */
 
-.tanegi-lib-container {
+.duku-lib-container {
   position: relative;
   min-height: 100vh;
   background: linear-gradient(135deg, #f5f7fa 0%, #e8ebf0 100%);
@@ -8,7 +8,7 @@
 }
 
 /* 戻るボタン */
-.back-button-tanegi {
+.back-button-duku {
   position: absolute;
   top: 20px;
   left: 20px;
@@ -23,12 +23,12 @@
   z-index: 10;
 }
 
-.back-button-tanegi:hover {
+.back-button-duku:hover {
   background-color: #e8e8e8;
 }
 
 /* タイトル */
-.tanegi-main-title {
+.duku-main-title {
   font-size: 2.5rem;
   color: #333;
   margin-bottom: 12px;
@@ -48,7 +48,7 @@
   }
 }
 
-.tanegi-subtitle {
+.duku-subtitle {
   font-size: 1.1rem;
   color: #666;
   margin-bottom: 60px;
@@ -63,6 +63,16 @@
   to {
     opacity: 1;
   }
+}
+
+/* ローディング */
+.loading-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+  font-size: 1.2rem;
+  color: #666;
 }
 
 /* セクション */
@@ -105,7 +115,6 @@
   overflow-x: auto;
   overflow-y: hidden;
   padding: 20px 0;
-  /* カスタムスクロールバー */
   scrollbar-width: thin;
   scrollbar-color: #667eea #e0e0e0;
 }
@@ -128,74 +137,198 @@
   background: #5568d3;
 }
 
-/* カードコンテナ */
-.pattern-cards-container {
+/* ギャラリーコンテナ */
+.pattern-gallery {
   display: flex;
-  gap: 24px;
+  gap: 20px;
   padding: 0 20px 20px 20px;
 }
 
-/* パターンカード */
-.pattern-card {
-  flex: 0 0 320px;
+/* ギャラリーアイテム */
+.gallery-item {
+  flex: 0 0 280px;
   background: #fff;
-  border-radius: 16px;
+  border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.gallery-item.clickable {
   cursor: pointer;
 }
 
-.pattern-card:hover {
-  transform: translateY(-8px);
+.gallery-item.clickable:hover {
+  transform: translateY(-8px) scale(1.02);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
-/* 画像エリア */
-.pattern-image-wrapper {
+/* ギャラリー画像ラッパー */
+.gallery-image-wrapper {
   width: 100%;
-  height: 240px;
+  height: 280px;
   overflow: hidden;
   background: #f5f5f5;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
-.pattern-image {
+/* ギャラリー画像 */
+.gallery-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.3s ease;
 }
 
-.pattern-card:hover .pattern-image {
+.gallery-item:hover .gallery-image {
   transform: scale(1.05);
 }
 
-/* カード情報 */
-.pattern-info {
-  padding: 20px;
-}
-
-.pattern-name {
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: #333;
-  margin-bottom: 8px;
-}
-
-.pattern-description {
+/* ギャラリー名前 */
+.gallery-name {
+  padding: 12px 16px;
   font-size: 0.95rem;
-  color: #666;
-  line-height: 1.6;
-  margin-bottom: 12px;
+  color: #333;
+  text-align: center;
+  background: #fff;
+  border-top: 1px solid #f0f0f0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.pattern-date {
-  font-size: 0.85rem;
-  color: #999;
-  margin: 0;
+/* モーダル */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
+}
+
+.modal-content {
+  background: #fff;
+  border-radius: 16px;
+  padding: 32px;
+  min-width: 320px;
+  max-width: 400px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-title {
+  font-size: 1.3rem;
+  color: #333;
+  margin-bottom: 24px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.modal-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modal-button {
+  padding: 14px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.share-button {
+  background: #667eea;
+  color: #fff;
+}
+
+.share-button:hover {
+  background: #5568d3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.delete-button {
+  background: #f56565;
+  color: #fff;
+}
+
+.delete-button:hover {
+  background: #e53e3e;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(245, 101, 101, 0.4);
+}
+
+.cancel-button {
+  background: #e2e8f0;
+  color: #4a5568;
+}
+
+.cancel-button:hover {
+  background: #cbd5e0;
+  transform: translateY(-2px);
+}
+
+/* 通知 */
+.notification {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  padding: 16px 24px;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  z-index: 2000;
+  animation: slideInRight 0.3s ease, fadeOut 0.3s ease 2.7s forwards;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+}
+
+.notification.success {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.notification.error {
+  background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
 }
 
 /* 空の状態 */
@@ -209,12 +342,12 @@
 
 /* レスポンシブ対応 */
 @media (max-width: 768px) {
-  .tanegi-main-title {
+  .duku-main-title {
     font-size: 2rem;
     margin-top: 40px;
   }
 
-  .tanegi-subtitle {
+  .duku-subtitle {
     font-size: 1rem;
     margin-bottom: 40px;
   }
@@ -224,12 +357,12 @@
     padding-left: 16px;
   }
 
-  .pattern-card {
-    flex: 0 0 280px;
+  .gallery-item {
+    flex: 0 0 240px;
   }
 
-  .pattern-image-wrapper {
-    height: 200px;
+  .gallery-image-wrapper {
+    height: 240px;
   }
 
   .pattern-section {
@@ -238,11 +371,11 @@
 }
 
 @media (max-width: 480px) {
-  .tanegi-lib-container {
+  .duku-lib-container {
     padding: 20px 10px;
   }
 
-  .tanegi-main-title {
+  .duku-main-title {
     font-size: 1.8rem;
   }
 
@@ -250,11 +383,15 @@
     font-size: 1.3rem;
   }
 
-  .pattern-card {
-    flex: 0 0 260px;
+  .gallery-item {
+    flex: 0 0 200px;
   }
 
-  .pattern-cards-container {
+  .gallery-image-wrapper {
+    height: 200px;
+  }
+
+  .pattern-gallery {
     gap: 16px;
     padding: 0 10px 20px 10px;
   }

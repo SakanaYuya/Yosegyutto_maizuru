@@ -12,7 +12,7 @@ export default function UnityApp() {
 
   useEffect(() => {
     const handleCapture = (detail) => {
-      console.log("📸 Unityから受信:", detail);
+      console.log("Unityから受信:", detail);
     };
 
     addEventListener("UnityCaptureSaved", handleCapture);

@@ -15,7 +15,7 @@ function LookingYosegi() {
   const [proposedWorks, setProposedWorks] = useState([]);
 
   // 全タグを作品から抽出
-  const allWorkTags = [...new Set(yosegiWorkData.flatMap(work => work.tags))];
+  //const allWorkTags = [...new Set(yosegiWorkData.flatMap(work => work.tags))];
   const allTechniques = [...new Set(yosegiWorkData.flatMap(work => work.use_tec || []))];
 
   // タグをカテゴリ別に分類
@@ -91,10 +91,10 @@ function LookingYosegi() {
     <div className="looking-container">
       {/* ホームに戻るボタン（左上） */}
       <button className="back-button-top" onClick={() => navigate("/home")}>
-        ← ホームに戻る
+        ホームに戻る
       </button>
 
-      <h1>寄木作品を探す</h1>
+      <h1>寄木職人のきろく</h1>
 
       {/* 初期状態：寄木作品を探すボタン */}
       {searchMode === null && (
@@ -110,7 +110,7 @@ function LookingYosegi() {
 
           {/* 全職人カード表示 */}
           <div className="all-people-section">
-            <h2 className="section-subtitle">すべての職人</h2>
+            <h2 className="section-subtitle">最近の投稿</h2>
             <div className="grid-container">
               {yosegiPeopleData.map((person) => (
                 <div
@@ -164,7 +164,7 @@ function LookingYosegi() {
               >
                 <div className="mode-button-title">寄木提案</div>
                 <div className="mode-button-desc">
-                  あなたに最適な作品を提案
+                  最適な作品を提案
                 </div>
               </button>
             </div>
@@ -259,7 +259,7 @@ function LookingYosegi() {
             <div className="proposal-content">
               <p className="proposal-description">
                 あなたのロール情報をもとに、新しい作品を提案します。<br/>
-                タグ情報を参照しながら、アルゴリズムが参考となる作品を1〜2件を選びます。
+                あなたのロールに含まれていないタグを持つ作品から、ランダムに1〜2件を選びます。
               </p>
 
               {/* 模様の提案ボタン */}
@@ -281,7 +281,7 @@ function LookingYosegi() {
                       <div
                         key={work.id}
                         className="proposed-work-card"
-                        onClick={() => navigate(`/people/${work.authorId}`)}
+                        onClick={() => navigate(`/works/${work.id}`)}
                       >
                         <div className="card-image-wrapper">
                           <img
@@ -355,8 +355,8 @@ function LookingYosegi() {
                 key={work.id}
                 className="people-card"
                 onClick={() => {
-                  // 作品の作者ページに遷移
-                  navigate(`/people/${work.authorId}`);
+                  // 作品詳細ページに遷移
+                  navigate(`/works/${work.id}`);
                 }}
               >
                 <div className="card-image-wrapper">

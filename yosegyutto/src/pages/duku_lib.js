@@ -1,51 +1,152 @@
 // src/pages/duku_lib.js
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import "./duku_lib.css"; // ← CSSは必要に応じて作成 or tanegi_lib.cssを流用
+import "./duku_lib.css";
 
 function DukuLib() {
   const navigate = useNavigate();
   const [minePatterns, setMinePatterns] = useState([]);
   const [publicPatterns, setPublicPatterns] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedPattern, setSelectedPattern] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [notification, setNotification] = useState({ show: false, message: '', type: '' });
 
-  // --- 🖼️ ファイル名リスト ---
-  // public/duku_imagas/mine/
-  const mineFiles = [
-    "yosegi_dummy.png",
-    "Capture_20251002_121639.png",
-    "Capture_20251002_122216.png",
-    "Capture_20251002_134121.png"
-  ];
+  // 通知を表示
+  const showNotification = (message, type) => {
+    setNotification({ show: true, message, type });
+    setTimeout(() => {
+      setNotification({ show: false, message: '', type: '' });
+    }, 3000);
+  };
 
-  // public/duku_imagas/public/
-  const publicFiles = [
-    "yosegi_dummy.jpeg",
-
-  ];
-
-  // --- 📦 パターン読み込み関数 ---
-  const loadPatterns = useCallback((folder, files, setter) => {
-    const basePath = `${process.env.PUBLIC_URL}/duku_imagas/${folder}`;
-    const patterns = files.map((file, i) => ({
-      id: `${folder}-${i}`,
-      name: file.split(".")[0],
-      image: `${basePath}/${file}`,
-      description:
-        folder === "mine"
-          ? "あなたが作成したヅクです。"
-          : "最近作られたヅクです。",
-      createdAt: new Date().toLocaleDateString("ja-JP"),
-    }));
-    setter(patterns);
+  // JSONファイルから画像情報を読み込む関数
+  const loadPatterns = useCallback(async (folder, setter) => {
+    try {
+      const response = await fetch(`${process.env.PUBLIC_URL}/duku_images/${folder}/images.json`);
+      if (!response.ok) {
+        throw new Error(`Failed to load ${folder}/images.json`);
+      }
+      const data = await response.json();
+      
+      // JSONデータを加工してパターン情報を作成
+      const patterns = data.map((item, index) => ({
+        id: `${folder}-${index}`,
+        name: item.name,
+        image: `${process.env.PUBLIC_URL}${item.path}`,
+        folder: folder
+      }));
+      
+      setter(patterns);
+    } catch (error) {
+      console.error(`Error loading ${folder} patterns:`, error);
+      setter([]);
+    }
   }, []);
 
   // --- 🚀 初回読み込み ---
   useEffect(() => {
-    loadPatterns("mine", mineFiles, setMinePatterns);
-    loadPatterns("public", publicFiles, setPublicPatterns);
+    const loadAllPatterns = async () => {
+      setLoading(true);
+      await Promise.all([
+        loadPatterns('mine', setMinePatterns),
+        loadPatterns('public', setPublicPatterns)
+      ]);
+      setLoading(false);
+    };
+
+    loadAllPatterns();
   }, [loadPatterns]);
 
-  // --- 🖥️ UI ---
+  // カードクリック時の処理
+  const handleCardClick = (pattern) => {
+    if (pattern.folder === 'mine') {
+      setSelectedPattern(pattern);
+      setShowModal(true);
+    }
+  };
+
+  // モーダルを閉じる
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedPattern(null);
+  };
+
+  // 共有処理
+  const handleShare = async () => {
+    if (!selectedPattern) return;
+
+    try {
+      const response = await fetch('http://localhost:5000/api/share-image', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          imageName: selectedPattern.name,
+          imageType: 'duku'
+        }),
+      });
+
+      if (response.ok) {
+        showNotification('共有しました！', 'success');
+        handleCloseModal();
+        // データを再読み込み
+        await Promise.all([
+          loadPatterns('mine', setMinePatterns),
+          loadPatterns('public', setPublicPatterns)
+        ]);
+      } else {
+        showNotification('共有に失敗しました', 'error');
+      }
+    } catch (error) {
+      console.error('Share error:', error);
+      showNotification('共有に失敗しました', 'error');
+    }
+  };
+
+  // 削除処理
+  const handleDelete = async () => {
+    if (!selectedPattern) return;
+
+    if (!window.confirm('本当に削除しますか?')) {
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:5000/api/delete-image', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          imageName: selectedPattern.name,
+          imageType: 'duku'
+        }),
+      });
+
+      if (response.ok) {
+        showNotification('削除しました！', 'success');
+        handleCloseModal();
+        // データを再読み込み
+        await loadPatterns('mine', setMinePatterns);
+      } else {
+        showNotification('削除に失敗しました', 'error');
+      }
+    } catch (error) {
+      console.error('Delete error:', error);
+      showNotification('削除に失敗しました', 'error');
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="duku-lib-container">
+        <div className="loading-message">読み込み中...</div>
+      </div>
+    );
+  }
+
   return (
     <div className="duku-lib-container">
       {/* 戻るボタン */}
@@ -54,34 +155,32 @@ function DukuLib() {
       </button>
 
       <h1 className="duku-main-title">ヅクライブラリ</h1>
-      <p className="duku-subtitle">作成したヅク / 他人が作成したヅクが閲覧できます</p>
+      <p className="duku-subtitle">作成したヅク模様/他人が作成したヅクが閲覧できます</p>
 
       {/* あなたが作成したヅク */}
       <section className="pattern-section">
         <h2 className="section-title">あなたが作成したヅク</h2>
         <div className="horizontal-scroll-wrapper">
-          <div className="pattern-cards-container">
+          <div className="pattern-gallery">
             {minePatterns.length > 0 ? (
               minePatterns.map((pattern) => (
-                <div key={pattern.id} className="pattern-card">
-                  <div className="pattern-image-wrapper">
-                    <img
-                      src={pattern.image}
+                <div 
+                  key={pattern.id} 
+                  className="gallery-item clickable"
+                  onClick={() => handleCardClick(pattern)}
+                >
+                  <div className="gallery-image-wrapper">
+                    <img 
+                      src={pattern.image} 
                       alt={pattern.name}
-                      className="pattern-image"
+                      className="gallery-image"
                       onError={(e) => {
-                        console.error("Failed to load image:", pattern.image);
-                        e.target.style.display = "none";
-                        e.target.parentElement.innerHTML =
-                          '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#999;font-size:0.9rem;">画像を読み込めません</div>';
+                        console.error('Failed to load image:', pattern.image);
+                        e.target.style.display = 'none';
                       }}
                     />
                   </div>
-                  <div className="pattern-info">
-                    <h3 className="pattern-name">{pattern.name}</h3>
-                    <p className="pattern-description">{pattern.description}</p>
-                    <p className="pattern-date">作成日: {pattern.createdAt}</p>
-                  </div>
+                  <div className="gallery-name">{pattern.name}</div>
                 </div>
               ))
             ) : (
@@ -95,25 +194,22 @@ function DukuLib() {
       <section className="pattern-section">
         <h2 className="section-title">最近作られたヅク</h2>
         <div className="horizontal-scroll-wrapper">
-          <div className="pattern-cards-container">
+          <div className="pattern-gallery">
             {publicPatterns.length > 0 ? (
               publicPatterns.map((pattern) => (
-                <div key={pattern.id} className="pattern-card">
-                  <div className="pattern-image-wrapper">
-                    <img
-                      src={pattern.image}
+                <div key={pattern.id} className="gallery-item">
+                  <div className="gallery-image-wrapper">
+                    <img 
+                      src={pattern.image} 
                       alt={pattern.name}
-                      className="pattern-image"
+                      className="gallery-image"
                       onError={(e) => {
-                        e.target.src = `${process.env.PUBLIC_URL}/duku_imagas/public/yosegi_dummy.png`; // フォールバック画像
+                        console.error('Failed to load image:', pattern.image);
+                        e.target.style.display = 'none';
                       }}
                     />
                   </div>
-                  <div className="pattern-info">
-                    <h3 className="pattern-name">{pattern.name}</h3>
-                    <p className="pattern-description">{pattern.description}</p>
-                    <p className="pattern-date">作成日: {pattern.createdAt}</p>
-                  </div>
+                  <div className="gallery-name">{pattern.name}</div>
                 </div>
               ))
             ) : (
@@ -122,6 +218,33 @@ function DukuLib() {
           </div>
         </div>
       </section>
+
+      {/* モーダル */}
+      {showModal && (
+        <div className="modal-overlay" onClick={handleCloseModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h3 className="modal-title">操作を選択してください</h3>
+            <div className="modal-buttons">
+              <button className="modal-button share-button" onClick={handleShare}>
+                共有する
+              </button>
+              <button className="modal-button delete-button" onClick={handleDelete}>
+                削除する
+              </button>
+              <button className="modal-button cancel-button" onClick={handleCloseModal}>
+                キャンセル
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 通知 */}
+      {notification.show && (
+        <div className={`notification ${notification.type}`}>
+          {notification.message}
+        </div>
+      )}
     </div>
   );
 }

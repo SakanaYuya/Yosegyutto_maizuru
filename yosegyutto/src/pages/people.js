@@ -16,7 +16,7 @@ function People() {
     return (
       <div className="people-container">
         <h2>職人が見つかりませんでした</h2>
-        <button onClick={() => navigate("/looking")}>一覧に戻る</button>
+        <button onClick={() => navigate("/search/looking")}>一覧に戻る</button>
       </div>
     );
   }
@@ -32,7 +32,7 @@ function People() {
   return (
     <div className="people-container">
       {/* 戻るボタン */}
-      <button className="back-button" onClick={() => navigate("/looking")}>
+      <button className="back-button" onClick={() => navigate("/search/looking")}>
         一覧に戻る
       </button>
       

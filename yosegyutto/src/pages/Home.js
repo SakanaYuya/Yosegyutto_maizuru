@@ -48,7 +48,7 @@ function Home() {
             onMouseEnter={() => setHoveredBox("search")}
             onMouseLeave={() => setHoveredBox(null)}
           >
-            <div className="box-title">寄木を探す</div>
+            <div className="box-title">よせぎゅと<br/>コミュニティ</div>
           </div>
         </div>
       </div>
