@@ -80,6 +80,32 @@ debug1: Connecting to sakanapc.local [192.168.53.211] port 22.
 debug3: set_sock_tos: set socket 3 IP_TOS 0x10
 
 
+## test
+
+import paramiko
+import json
+
+# 送信する最小データ
+data = {"test": 1}
+
+# JSON文字列化
+json_str = json.dumps(data)
+
+# SSH接続情報
+hostname = "sakanapc.local"
+username = "sshuser"
+password = "ここにsshuserのパスワード"
+remote_path = r"C:\Users\sshuser\real_time.json"
+
+# SSH & SFTPで送信
+ssh = paramiko.SSHClient()
+ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+ssh.connect(hostname, username=username, password=password)
+ssh.open_sftp().file(remote_path, "w").write(json_str)
+ssh.close()
+
+print("送信完了")
+
 
 
 
