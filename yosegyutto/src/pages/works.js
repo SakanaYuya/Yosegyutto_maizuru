@@ -16,7 +16,7 @@ function Works() {
     return (
       <div className="work-container">
         <h2>作品が見つかりませんでした</h2>
-        <button onClick={() => navigate("/search/looking")}>一覧に戻る</button>
+        <button onClick={() => navigate("/looking")}>一覧に戻る</button>
       </div>
     );
   }
@@ -24,7 +24,7 @@ function Works() {
   return (
     <div className="work-container">
       {/* 戻るボタン */}
-      <button className="back-button" onClick={() => navigate("/search/looking")}>
+      <button className="back-button" onClick={() => navigate("/looking")}>
         一覧に戻る
       </button>
 

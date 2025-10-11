@@ -110,7 +110,7 @@ function LookingYosegi() {
 
           {/* 全職人カード表示 */}
           <div className="all-people-section">
-            <h2 className="section-subtitle">直近の作品</h2>
+            <h2 className="section-subtitle">最近の投稿</h2>
             <div className="grid-container">
               {yosegiPeopleData.map((person) => (
                 <div
