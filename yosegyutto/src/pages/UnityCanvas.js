@@ -1,46 +1,93 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect, useCallback, useState } from "react";
 import { Unity, useUnityContext } from "react-unity-webgl";
 import axios from "axios";
 
 function UnityCanvas() {
-  const { unityProvider, addEventListener, removeEventListener } = useUnityContext({
+  const { unityProvider } = useUnityContext({
     loaderUrl: "Build/yosegyutoWebGL.loader.js",
     dataUrl: "Build/yosegyutoWebGL.data",
     frameworkUrl: "Build/yosegyutoWebGL.framework.js",
     codeUrl: "Build/yosegyutoWebGL.wasm",
   });
 
-  // handleUnityCapture関数は変更なし
+  const [status, setStatus] = useState(""); // 👈 追加：進行状況表示用
+
+  // Unity → React 画像アップロード
   const handleUnityCapture = useCallback(async (event) => {
     const { fileName, base64Data, targetFolder } = event.detail;
     console.log(`Unityから画像データを受信: ${fileName} -> 保存先: ${targetFolder}`);
 
     try {
       await axios.post("http://localhost:3001/upload-image", {
-        fileName: fileName,
+        fileName,
         imageData: base64Data,
-        targetFolder: targetFolder
+        targetFolder,
       });
       alert("画像のアップロードに成功！");
     } catch (error) {
-      console.error("アップロードエラー:", error); // エラー内容をコンソールに表示
+      console.error("アップロードエラー:", error);
       alert("アップロードに失敗しました。");
     }
-  }, []); // ここは空のままでOKです (useCallbackの挙動として正しい)
+  }, []);
 
-  // ★★★ ここのuseEffectの書き方を修正します ★★★
   useEffect(() => {
-    // グローバルなwindowオブジェクトではなく、
-    // react-unity-webglが提供するイベントリスナーを使う方が安全で確実です。
-    // しかし、今回は元の仕組みを活かすため、windowを使い続けます。
     window.addEventListener("unityCaptureReady", handleUnityCapture);
     return () => {
       window.removeEventListener("unityCaptureReady", handleUnityCapture);
     };
-    // 依存配列にhandleUnityCaptureを追加します。
   }, [handleUnityCapture]);
 
-  return <Unity unityProvider={unityProvider} style={{ width: "100%", height: "100%" }} />;
+  // 👇 追加：目録生成ボタンの処理
+  const generateManifest = async () => {
+    setStatus("⏳ 目録ファイルを生成中...");
+    try {
+      const res = await axios.get("http://localhost:3001/generate-manifest");
+      if (res.data.success) {
+        setStatus(`✅ ${res.data.count} 件のPNGファイルを登録しました！`);
+      } else {
+        setStatus("❌ 生成に失敗しました。");
+      }
+    } catch (err) {
+      console.error(err);
+      setStatus("⚠️ サーバーとの通信に失敗しました。");
+    }
+  };
+
+  return (
+    <div style={{ textAlign: "center" }}>
+      {/* Unity本体 */}
+      <Unity
+        unityProvider={unityProvider}
+        style={{
+          width: "70%",
+          height: "70vh",
+          margin: "20px auto",
+          display: "block",
+          borderRadius: "12px",
+          boxShadow: "0 0 10px rgba(0,0,0,0.2)",
+        }}
+      />
+
+      {/* 👇 ここにボタンを追加 */}
+      <button
+        onClick={generateManifest}
+        style={{
+          backgroundColor: "#2196F3",
+          color: "white",
+          border: "none",
+          borderRadius: "6px",
+          padding: "10px 20px",
+          cursor: "pointer",
+          fontSize: "16px",
+          marginTop: "16px",
+        }}
+      >
+        🧾 目録ファイルを生成
+      </button>
+
+      <p>{status}</p>
+    </div>
+  );
 }
 
 export default UnityCanvas;
