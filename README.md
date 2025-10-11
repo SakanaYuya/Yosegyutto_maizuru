@@ -80,13 +80,13 @@ debug1: Connecting to sakanapc.local [192.168.53.211] port 22.
 debug3: set_sock_tos: set socket 3 IP_TOS 0x10
 
 
-## test
+## test RUN
 
 import paramiko
 import json
 
 #送信する最小データ
-data = {"test": 1}
+data = {"test": 2}
 
 #JSON文字列化
 json_str = json.dumps(data)
@@ -94,8 +94,11 @@ json_str = json.dumps(data)
 #SSH接続情報
 hostname = "sakanapc.local"
 username = "sshuser"
-password = "ここにsshuserのパスワード"
-remote_path = r"C:\Users\sshuser\real_time.json"
+password = "2676"
+remote_path = r"C:\Users\ysaka\programs\yosegi\Yosegyutto_maizuru\yosegyutto\public\json_data\real_time_test.json"
+
+#C:\Users\ysaka\programs\yosegi\Yosegyutto_maizuru\yosegyutto\public\json_data
+
 
 #SSH & SFTPで送信
 ssh = paramiko.SSHClient()
@@ -105,6 +108,7 @@ ssh.open_sftp().file(remote_path, "w").write(json_str)
 ssh.close()
 
 print("送信完了")
+eeeeeee
 
 C:\Users\ysaka\programs\yosegi\Yosegyutto_maizuru\yosegyutto\public\json_data
 
