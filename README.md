@@ -66,6 +66,55 @@ feat: 機能Aを追加
 | chore    | ビルド、補助ツール、ライブラリ関連                      |
 
 
+ssh -vvv sshuser@sakanaPc.local
+OpenSSH_9.2p1 Debian-2+deb12u7, OpenSSL 3.0.17 1 Jul 2025
+debug1: Reading configuration data /etc/ssh/ssh_config
+debug1: /etc/ssh/ssh_config line 19: include /etc/ssh/ssh_config.d/*.conf matched no files
+debug1: /etc/ssh/ssh_config line 21: Applying options for *
+debug3: expanded UserKnownHostsFile '~/.ssh/known_hosts' -> '/home/yosegi/.ssh/known_hosts'
+debug3: expanded UserKnownHostsFile '~/.ssh/known_hosts2' -> '/home/yosegi/.ssh/known_hosts2'
+debug2: resolving "sakanapc.local" port 22
+debug3: resolve_host: lookup sakanapc.local:22
+debug3: ssh_connect_direct: entering
+debug1: Connecting to sakanapc.local [192.168.53.211] port 22.
+debug3: set_sock_tos: set socket 3 IP_TOS 0x10
+
+
+## test RUN
+
+import paramiko
+import json
+
+#送信する最小データ
+data = {"test": 2}
+
+#JSON文字列化
+json_str = json.dumps(data)
+
+#SSH接続情報
+hostname = "sakanapc.local"
+username = "sshuser"
+password = "2676"
+remote_path = r"C:\Users\ysaka\programs\yosegi\Yosegyutto_maizuru\yosegyutto\public\json_data\real_time_test.json"
+
+#C:\Users\ysaka\programs\yosegi\Yosegyutto_maizuru\yosegyutto\public\json_data
+
+
+#SSH & SFTPで送信
+ssh = paramiko.SSHClient()
+ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+ssh.connect(hostname, username=username, password=password)
+ssh.open_sftp().file(remote_path, "w").write(json_str)
+ssh.close()
+
+print("送信完了")
+eeeeeee
+
+C:\Users\ysaka\programs\yosegi\Yosegyutto_maizuru\yosegyutto\public\json_data
+
+
+
+
 
 マージを実行　10/10
 unity.js確認
